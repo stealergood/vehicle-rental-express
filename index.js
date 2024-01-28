@@ -23,7 +23,8 @@ const corsOptions = {
     "http://localhost:3001",
     "http://localhost:8080",
     "https://vehicle-rental-react.vercel.app",
-    "https://vehicle-rental-react-roan.vercel.app"
+    "https://vehicle-rental-react-roan.vercel.app",
+    "*"
   ],
   allowedHeader: "x-access-token",
   method: ["GET", "POST", "PATCH", "DETELE", "OPTIONS"],
