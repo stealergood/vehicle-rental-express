@@ -1,19 +1,27 @@
 const mysql = require("mysql2");
 
-const DB_URL = process.env.JAWSDB_URL;
+// Parse JAWSDB_URL if available
+const dbUrl = process.env.JAWSDB_URL;
 
-const extract = DB_URL.match(
-  /mysql:\/\/(?<user>\w+):(?<password>\w+)@(?<host>\w+):(?<port>\w+)\/(?<database>\w+)/
-);
+let dbConfig = {};
 
-const { user, password, host, port, database } = extract.groups;
+const urlParts = dbUrl.match(/mysql:\/\/([^:]+):([^@]+)@([^:]+):(\d+)\/(.+)/);
+if (!urlParts) {
+  console.error('Invalid database URL');
+  process.exit(1);
+}
 
-const db = mysql.createConnection({
-  host: host,
-  user: user,
-  password: password,
-  database: database,
-  port: port,
-});
+const [, dbUser, dbPassword, dbHost, dbPort, dbName] = urlParts;
+
+dbConfig = {
+  host: dbHost,
+  user: dbUser,
+  password: dbPassword,
+  database: dbName,
+  port: parseInt(dbPort, 10), // Convert port to integer
+};
+
+// Create connection
+const db = mysql.createConnection(dbConfig);
 
 module.exports = db;
